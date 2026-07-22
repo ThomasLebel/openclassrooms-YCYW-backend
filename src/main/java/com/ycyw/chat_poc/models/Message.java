@@ -19,8 +19,8 @@ public class Message {
     @JoinColumn(name = "ticket_id")
     private SupportTicket supportTicket;
 
-    @Column(name = "is_from_agent", nullable = false)
-    private Boolean isFromAgent;
+    @Column(name = "sender_pseudo", nullable = false)
+    private String senderPseudo;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;

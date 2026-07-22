@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class NewMessagePayload {
     private Long conversationId;
-    private Boolean fromAgent;
+    private String pseudo;
     private String content;
 }
