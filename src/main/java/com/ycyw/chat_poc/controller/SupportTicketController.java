@@ -49,10 +49,7 @@ public class SupportTicketController {
         message.setContent(payload.getMessage());
         messageRepository.save(message);
 
-        // Envoi ticket dans le canal des tickets en attente pour les agents
-        messagingTemplate.convertAndSend("/topic/supportTickets.waiting", supportTicket);
-
-        // Envoi ticket dans le canal de la pastille pour mettre à jour historique côté utilisateur
+        // Création du DTO
         TicketSummaryDTO ticketSummaryDTO = new TicketSummaryDTO(
                 supportTicket.getId(),
                 supportTicket.getStatus(),
@@ -61,10 +58,16 @@ public class SupportTicketController {
                 supportTicket.getCreatedAt(),
                 0
         );
+
+        // Envoi ticket dans le canal des tickets en attente pour les agents
+        messagingTemplate.convertAndSend("/topic/supportTickets.waiting", ticketSummaryDTO);
+
+        // Envoi ticket dans le canal de la pastille pour mettre à jour historique côté utilisateur
         messagingTemplate.convertAndSend(
                 "/topic/user." + payload.getUserPseudo() + ".badge",
                 ticketSummaryDTO
         );
+
 
         SupportTicketDTO supportTicketDTO = new SupportTicketDTO(supportTicket.getId(), supportTicket.getSubject(), supportTicket.getCreatedAt());
         return ResponseEntity.ok(supportTicketDTO);
